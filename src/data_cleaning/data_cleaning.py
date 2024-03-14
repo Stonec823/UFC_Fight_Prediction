@@ -7,9 +7,13 @@ from src.data_cleaning.utils import (
     extract_id,
     split_location,
     split_throw_land,
-    drop_pct_cols
+    drop_pct_cols,
+    clean_outcome, 
+    clean_method,
+    clean_time,
+    clean_weightclass,
+    split_bout
     )
-
 
 def clean_fighter_tott(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -38,9 +42,7 @@ def clean_fighter_tott(df: pd.DataFrame) -> pd.DataFrame:
     if 'url' in new_df.columns:
         new_df['fighter_id'] = new_df['url'].apply(extract_id)
         new_df.drop('url', axis=1, inplace=True)
-    
     return new_df
-
 
 def clean_event_details(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -64,13 +66,12 @@ def clean_event_details(df: pd.DataFrame) -> pd.DataFrame:
     
     if 'location' in new_df.columns:
         new_df[['city', 'state', 'country']] = new_df['location'].apply(split_location)
-    
     return new_df
-
 
 def clean_fighter_details(df: pd.DataFrame) -> pd.DataFrame:
     """
     file: ufc_fighter_details.csv
+
     Cleans fighter details in a dataframe by standardizing column names to lowercase
     and extracting fighter IDs from URLs. The URL column is then dropped.
     
@@ -82,11 +83,12 @@ def clean_fighter_details(df: pd.DataFrame) -> pd.DataFrame:
     if 'url' in new_df.columns:
         new_df['fighter_id'] = new_df['url'].apply(extract_id)
         new_df.drop('url', axis=1, inplace=True)
-
     return new_df
 
 def clean_fight_stats(df: pd.DataFrame) -> pd.DataFrame:
     """
+    file: ufc_fight_stats.csv
+    
     Cleans fight statistics data by standardizing column names, splitting specified columns
     based on a delimiter, and dropping percentage columns.
 
@@ -106,3 +108,30 @@ def clean_fight_stats(df: pd.DataFrame) -> pd.DataFrame:
         .pipe(clean_column_names)
         .pipe(split_throw_land, cols_to_spit)
         .pipe(drop_pct_cols))
+
+def clean_fight_results(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    file: ufc_fight_results.csv
+
+    Cleans the fight results data by applying a series of cleaning functions, extracting fight ID,
+    and dropping specific columns.
+
+    The function standardizes column names, extracts an ID from the 'url' column, cleans outcome
+    and method columns, splits the 'bout' column into two separate columns, converts the 'time'
+    column to total seconds, and drops unnecessary columns.
+
+    :param df: The input DataFrame with fight results data.
+    :return: A cleaned DataFrame with standardized and relevant information for fight analysis.
+    """
+    to_drop = ['time_format', 'referee', 'details', 'url']
+    new_df = df.copy(deep=True).pipe(clean_column_names)
+    new_df['fight_id'] = new_df['url'].apply(extract_id)
+    return (
+        new_df
+        .pipe(clean_outcome)
+        .pipe(clean_method)
+        .pipe(clean_weightclass)
+        .pipe(split_bout)
+        .pipe(clean_time, 'time')
+        .drop(to_drop, axis=1)
+    )
