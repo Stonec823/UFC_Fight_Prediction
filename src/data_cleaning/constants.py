@@ -1,0 +1,27 @@
+METHOD_MAP = {'Could Not Continue': 'other',
+ 'DQ': 'dq',
+ 'Decision - Majority': 'dec_maj',
+ 'Decision - Split': 'dec_spl',
+ 'Decision - Unanimous': 'dec_una',
+ 'KO/TKO': 'ko_tko',
+ 'Other': 'other',
+ 'Overturned': 'other',
+ 'Submission': 'sub',
+ "TKO - Doctor's Stoppage": 'tko_doc'}
+
+WEIGHT_MAP = {
+    'Heavyweight Bout': "hw",
+    'Middleweight Bout': "mw",
+    'Lightweight Bout': "lw",
+    "Women's Flyweight Bout": "wflw",
+    'Welterweight Bout': "ww",
+    'Bantamweight Bout': "bw",
+    "Women's Featherweight Bout": "wftw",
+    'Featherweight Bout':"ftw",
+    'Light Heavyweight Bout':"lhw",
+    'Flyweight Bout': "flw",
+    "Women's Strawweight Bout": "wsw",
+    "Women's Bantamweight Bout":"wbw",
+    'Catch Weight Bout':"cw",
+    'Super Heavyweight Bout': "shw", 
+    'Open Weight Bout': "ow"}
