@@ -88,7 +88,7 @@ def clean_fighter_details(df: pd.DataFrame) -> pd.DataFrame:
 def clean_fight_stats(df: pd.DataFrame) -> pd.DataFrame:
     """
     file: ufc_fight_stats.csv
-    
+
     Cleans fight statistics data by standardizing column names, splitting specified columns
     based on a delimiter, and dropping percentage columns.
 
@@ -126,6 +126,8 @@ def clean_fight_results(df: pd.DataFrame) -> pd.DataFrame:
     to_drop = ['time_format', 'referee', 'details', 'url']
     new_df = df.copy(deep=True).pipe(clean_column_names)
     new_df['fight_id'] = new_df['url'].apply(extract_id)
+    new_df['event'] = new_df['event'].str.strip()
+    
     return (
         new_df
         .pipe(clean_outcome)
