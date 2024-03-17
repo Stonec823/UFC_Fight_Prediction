@@ -106,18 +106,22 @@ def clean_weightclass(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def clean_time(df: pd.DataFrame, column_name: str) -> pd.DataFrame:
+def clean_time(df: pd.DataFrame, colname: str, split_on: str = ":") -> pd.DataFrame:
     """
-    Converts a time column in 'minutes:seconds' format into total seconds.
+    Convert a time string in a DataFrame column to total seconds.
+    
+    Parameters:
+    df (pd.DataFrame): The DataFrame containing the time strings.
+    colname (str): The name of the column with the time strings to convert.
+    split_on (str): The character used to split the time string into minutes and seconds.
+
+    Returns:
+    pd.DataFrame: The DataFrame with the time column converted to total seconds.
     """
-    # Split the column into two new columns 'minutes' and 'seconds'
-    time_parts = df[column_name].str.split(':', expand=True)
-    
-    # Convert 'minutes' and 'seconds' to integers
-    minutes = time_parts[0].astype(int)
-    seconds = time_parts[1].astype(int)
-    
-    # Calculate total seconds and replace the original column
-    df[column_name] = minutes * 60 + seconds
+    time_parts = df[colname].str.split(split_on, expand=True)
+    minutes = pd.to_numeric(time_parts[0], errors='coerce')
+    seconds = pd.to_numeric(time_parts[1], errors='coerce')
+    # Calculate total seconds using vectorized operations
+    df[colname] = minutes * 60 + seconds
     
     return df

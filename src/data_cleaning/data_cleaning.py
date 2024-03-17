@@ -106,6 +106,7 @@ def clean_fight_stats(df: pd.DataFrame) -> pd.DataFrame:
     return (
         df
         .pipe(clean_column_names)
+        .pipe(clean_time, 'ctrl')
         .pipe(split_throw_land, cols_to_spit)
         .pipe(drop_pct_cols))
 
