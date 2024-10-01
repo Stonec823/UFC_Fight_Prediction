@@ -1,2 +1,1 @@
-# Team-45
- Team 45's group project GitHub repository for MGT 6203 (Canvas) Spring of 2024 semester.
+This group project was compeleted for MGMT 6203 class in the Georgia Tech OMSA Program
